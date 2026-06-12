@@ -28,12 +28,12 @@ def create_folder(folder_path):
         pass
 
 
-if check_folder_exists(f"{cpath}/.auratext/"):
+if check_folder_exists(f"{cpath}/.Ar/"):
     pass
 else:
-    create_folder(f"{cpath}/.auratext")
+    create_folder(f"{cpath}/.Ar")
 # Path to the CSV file
-CSV_FILE = f"{cpath}/.auratext/todo.csv"
+CSV_FILE = f"{cpath}/.Ar/todo.csv"
 
 
 class ToDoApp(QDialog):

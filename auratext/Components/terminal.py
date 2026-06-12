@@ -43,7 +43,7 @@ class TerminalHistoryDialog(QDialog):
         else:
             print("Unsupported operating system")
             sys.exit(1)
-        self.local_app_data = os.path.join(local_app_data, "AuraText")
+        self.local_app_data = os.path.join(local_app_data, "Ar")
 
         self.setWindowTitle("Terminal History")
         self.setMinimumSize(400, 300)

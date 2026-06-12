@@ -174,7 +174,7 @@ class WelcomeWidget(QWidget):
         title_label.setFont(get_font_for_platform(size=48, plain=False))
         title_label.setStyleSheet("color: #cccccc;")
         
-        subtitle_label = QLabel("Like any text editor. Unlike any text editor")
+        subtitle_label = QLabel("A fast IDE written in Python with PyQt6")
         subtitle_label.setFont(get_font_for_platform(size=16, plain=False))
         subtitle_label.setStyleSheet("color: #888888; margin-bottom: 20px;")
         

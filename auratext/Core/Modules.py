@@ -164,7 +164,7 @@ elif platform.system() == "Darwin":
 else:
     print("Unsupported operating system")
     sys.exit(1)
-local_app_data = os.path.join(local_app_data, "AuraText")
+local_app_data = os.path.join(local_app_data, "Ar")
 cfile_path = f"{local_app_data}/data/Cpath_File.txt"
 
 class CodeSnippets:

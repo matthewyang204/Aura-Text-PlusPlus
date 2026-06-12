@@ -20,7 +20,7 @@ class DBViewer(QWidget):
         tables = cursor.fetchall()
         con.close()
 
-        db = QSqlDatabase.addDatabase("QSQLITE", "auratext_dbviewer")
+        db = QSqlDatabase.addDatabase("QSQLITE", "Ar_dbviewer")
         db.setDatabaseName(self.db_path)
 
         if not db.open():
