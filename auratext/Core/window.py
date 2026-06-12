@@ -2594,7 +2594,7 @@ class Window(QMainWindow):
 
     @staticmethod
     def about_github():
-        webbrowser.open_new_tab("https://github.com/rohankishore/Aura-Notes")
+        webbrowser.open_new_tab("https://github.com/matthewyang204/Ar")
 
     def version(self):
         try:
@@ -2611,7 +2611,7 @@ class Window(QMainWindow):
 
     @staticmethod
     def buymeacoffee():
-        webbrowser.open_new_tab("https://ko-fi.com/rohankishore")
+        pass
 
     def fullscreen(self):
         if not self.isFullScreen():

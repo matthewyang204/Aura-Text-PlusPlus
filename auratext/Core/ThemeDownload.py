@@ -60,7 +60,7 @@ class ThemeDownloader(QWidget):
             else:
                 item.setHidden(True)
 
-    username = "rohankishore"
+    username = "matthewyang204"
     repo = "AuraText-Themes"
     branch = "main"
 
