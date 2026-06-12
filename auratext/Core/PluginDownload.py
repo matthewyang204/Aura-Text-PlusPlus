@@ -64,7 +64,7 @@ class FileDownloader(QWidget):
         super().__init__()
         self._window = window
         self.username = "matthewyang204"
-        self.repo = "AuraText-Plugins"
+        self.repo = "Ar-Plugins"
         self.cards = []
         self.init_ui()
 

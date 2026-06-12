@@ -61,7 +61,7 @@ class ThemeDownloader(QWidget):
                 item.setHidden(True)
 
     username = "matthewyang204"
-    repo = "AuraText-Themes"
+    repo = "Ar-Themes"
     branch = "main"
 
     def get_theme_list(self):

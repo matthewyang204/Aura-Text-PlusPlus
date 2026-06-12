@@ -113,19 +113,19 @@ class GitRebaseDialog(QDialog):
 
         try:
             # Write the script to a temporary file
-            script_path = os.path.join(tempfile.gettempdir(), 'auratext-rebase-script.txt')
+            script_path = os.path.join(tempfile.gettempdir(), 'ar-rebase-script.txt')
             with open(script_path, 'w') as f:
                 f.write(rebase_script)
 
             if platform.system() == "Windows":
                 # For Windows, we need to create a simple batch file to act as the editor
-                editor_script_path = os.path.join(tempfile.gettempdir(), 'auratext-rebase-editor.bat')
+                editor_script_path = os.path.join(tempfile.gettempdir(), 'ar-rebase-editor.bat')
                 with open(editor_script_path, 'w') as f:
                     # The batch script will be called by git with the path to the git-rebase-todo file
                     # We overwrite that file with our generated script.
                     f.write(f'copy "{script_path}" %1 > NUL')
             else:
-                editor_script_path = os.path.join(tempfile.gettempdir(), 'auratext-rebase-editor.sh')
+                editor_script_path = os.path.join(tempfile.gettempdir(), 'ar-rebase-editor.sh')
                 with open(editor_script_path, 'w') as f:
                     unixRScriptContents = "#!/bin/sh" + '\n' + f'cp "{script_path}" "$1"' + "\n"
                     f.write(unixRScriptContents)
