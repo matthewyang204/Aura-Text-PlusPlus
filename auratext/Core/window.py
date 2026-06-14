@@ -1109,7 +1109,7 @@ class Window(QMainWindow):
             self.explorer_tree_view.setColumnHidden(2, True)  # Size column
             self.explorer_tree_view.setColumnHidden(3, True)  # Date modified column
             self.explorer_tree_view.doubleClicked.connect(self.open_file)
-            self.explorer_tree_view.setExpandsOnDoubleClick(False)
+            self.explorer_tree_view.setExpandsOnDoubleClick(True)
 
         self.model.setRootPath(root_path)
         self.explorer_tree_view.setRootIndex(self.model.index(root_path))
@@ -1652,6 +1652,8 @@ class Window(QMainWindow):
     def open_file(self, index):
         if not self.model:
             return
+        if self.model.isDir(index):
+            return
         path = self.model.filePath(index)
         self.open_file_from_path(path, index=index)
 
@@ -1691,12 +1693,7 @@ class Window(QMainWindow):
         except FileNotFoundError:
             return
         except IsADirectoryError:
-            if self.explorer_tree_view.isExpanded(index):
-                self.explorer_tree_view.collapse(index)
-                print("Collapsing directory:", self.model.filePath(index))
-            else:
-                self.explorer_tree_view.setExpanded(index, True)
-                print("Expanding directory:", self.model.filePath(index))
+            return
         except Exception as e:
             print(e)
             messagebox = QMessageBox()
