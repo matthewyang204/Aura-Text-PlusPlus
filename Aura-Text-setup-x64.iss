@@ -3,7 +3,7 @@
 
 #define MyAppName "Aura Text"
 #define MyAppVersion "5.5.0-matthewyang204build"
-#define MyAppPublisher "Rohan Kishore"
+#define MyAppPublisher "Matthew Yang (杨佳明)"
 #define MyAppURL "https://github.com/matthewyang204/Aura-Text-PlusPlus"
 #define MyAppExeName "Aura Text.exe"
 #define MyAppAssocName "Text Document"
