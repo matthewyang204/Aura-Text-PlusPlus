@@ -9,6 +9,7 @@ import time
 import hashlib
 import atexit
 import shutil
+import getpass
 
 from PyQt6.QtCore import Qt, QObject, pyqtSignal, QTimer
 from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea
@@ -58,7 +59,8 @@ class Linter(QObject):
         self.finished = pyqtSignal(list)
         self.sysTempDir = tempfile.gettempdir()
         dir_string = hashlib.sha256(str(time.time()).encode()).hexdigest()[:8]
-        self.tempdir = os.path.join(self.sysTempDir, f"pylint-run-{dir_string}")
+        user_string = getpass.getuser()
+        self.tempdir = os.path.join(self.sysTempDir, f"pylint-run-{user_string}-{dir_string}")
         if not os.path.exists(self.tempdir):
             os.makedirs(self.tempdir)
 
