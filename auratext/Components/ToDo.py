@@ -6,6 +6,7 @@ import sys
 from auratext.Misc.import_res import notepadequalequalComponentImportPathAppend
 sys.path.append(notepadequalequalComponentImportPathAppend)
 
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QVBoxLayout, QListWidget, QPushButton, QHBoxLayout, QMessageBox, QDialog, QLineEdit
 )
@@ -76,6 +77,7 @@ class ToDoApp(QDialog):
         self.task_input = QLineEdit()
         self.task_input.setPlaceholderText("Enter a new task")
         self.add_task_layout.addWidget(self.task_input)
+        self.task_input.installEventFilter(self)
 
         self.add_task_button = QPushButton("Add Task")
         self.add_task_button.clicked.connect(self.add_task)
@@ -83,6 +85,14 @@ class ToDoApp(QDialog):
 
         # Load tasks from the CSV file
         self.load_tasks()
+    
+    def eventFilter(self, obj, event):
+        """Handle Enter to add"""
+        if obj == self.task_input and event.type() == event.Type.KeyPress:
+            if event.key() == Qt.Key.Key_Return: # and event.modifiers() != Qt.KeyboardModifier.ShiftModifier
+                self.add_task()
+                return True
+        return super().eventFilter(obj, event)
 
     def load_tasks(self):
         """Load tasks from the CSV file into the list widget."""
