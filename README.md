@@ -131,7 +131,7 @@ We need the prerequisites above. After getting them, you can run the program wit
 
 ## Development 
 
-![Alt](https://repobeats.axiom.co/api/embed/c478f91eea3690c7415f891646a2a15a62b4fb20.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/c434d3574ecb6709009acf81a6b7bc0546cab9af.svg "Repobeats analytics image")
 <br>
 
 ## Roadmap
