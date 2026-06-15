@@ -50,7 +50,7 @@ from .CommandPalette import CommandPalette
 from ..Components import powershell, terminal, statusBar, ProjectManager, About, ToDo, GitCommit, GitGraph, GitRebase, Performance, RegexPlayground
 from ..Components.CommandPalette import CommandPalette
 from ..Components.NewProjectDialog import NewProjectDialog
-from ..Components import Linter
+from ..Components.Linter import Linter
 from ..Components.FunctionGrid import FunctionGridDialog
 from .MiniMapWidget import MiniMapWidget
 from .svg_icon_manager import SVGIconManager
