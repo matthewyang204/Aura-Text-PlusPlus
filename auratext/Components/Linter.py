@@ -4,21 +4,17 @@ Provides real-time error/warning indicators using pylint
 """
 import os
 import sys
-import subprocess
-import threading
-import platform
-from typing import List, Dict, Tuple, Optional
 import tempfile
 import time
 import hashlib
 import atexit
+import shutil
 
 from PyQt6.QtCore import Qt, QObject, pyqtSignal, QTimer
 from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea
 from PyQt6.QtGui import QColor
 from PyQt6.Qsci import QsciScintilla
 
-from io import StringIO
 from pylint.lint import Run
 from pylint.reporters import BaseReporter
 
@@ -74,7 +70,8 @@ class Linter(QObject):
             return
         if os.path.exists(self.tempdir):
             try:
-                os.rmdir(self.tempdir)
+                shutil.rmtree(self.tempdir)
+                print("Cleaned up code linter temp directory successfully.")
             except Exception as e:
                 print(f"Error cleaning up temp directory: {e}")
 
