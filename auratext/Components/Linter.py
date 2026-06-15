@@ -14,7 +14,7 @@ import hashlib
 import atexit
 
 from PyQt6.QtCore import Qt, QObject, pyqtSignal, QTimer
-from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
+from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea
 from PyQt6.QtGui import QColor
 from PyQt6.Qsci import QsciScintilla
 
@@ -131,7 +131,12 @@ class LinterMessageItem(QDockWidget):
         self.message_layout = QVBoxLayout(self.message_display)
         self.message_layout.setContentsMargins(0, 0, 0, 0)
         self.message_layout.setSpacing(0)
-        self.main_layout.addWidget(self.message_display)
+
+        self.scroll = QScrollArea()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.message_display)
+
+        self.main_layout.addWidget(self.scroll)
 
         self.setWidget(self.main_widget)
 
@@ -154,4 +159,5 @@ class LinterMessageItem(QDockWidget):
                     letter-spacing: 0.5px;
                 }}
             """)
+            msg_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
             self.message_layout.addWidget(msg_label)
