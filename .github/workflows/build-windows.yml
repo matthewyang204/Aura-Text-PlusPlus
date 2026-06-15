@@ -34,23 +34,11 @@ jobs:
       run:
         python build.py
 
-    - name: Free up disk space
-      shell: bash
-      run: |
-        echo "Disk space before cleanup:"
-        df -h
-        # Remove large pre-installed tools not needed for your build
-        rm -rf /c/Program\ Files/Android
-        rm -rf /c/Selenium
-        rm -rf /c/hostedtoolcache/windows/Go
-        rm -rf /c/hostedtoolcache/windows/Ruby
-        echo "Disk space after cleanup:"
-        df -h
-
     - name: Compile Windows installer with Inno Setup
       uses: Minionguyjpro/Inno-Setup-Action@v1.2.8
       with:
         path: Aura-Text-setup-x64.iss
+        options: /Q
     
     - name: Upload ZIP
       uses: actions/upload-artifact@v7
