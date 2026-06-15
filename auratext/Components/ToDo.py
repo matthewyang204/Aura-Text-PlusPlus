@@ -171,4 +171,39 @@ class ToDoApp(QDialog):
             QMessageBox.critical(self, "Error", f"Failed to add task: {e}")
 
     def delete_task(self):
-        pass
+        selected_items = self.list_widget.selectedItems()
+        if not selected_items:
+            QMessageBox.warning(self, "Warning", "Please select a task to delete.")
+            return
+
+        selected_task = selected_items[0].text()
+        task_name = selected_task.split(" [")[0]  # Extract the task name
+
+        updated_rows = []
+        try:
+            with open(CSV_FILE, "r", newline="") as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    if len(row) != 2:
+                        continue
+                    task, status = row
+                    if not task == task_name:
+                        updated_rows.append(row)
+            
+            with open(CSV_FILE, "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(updated_rows)
+
+            # QMessageBox.information(self, "Success", f"Task '{task_name}' deleted.")
+
+            # Refresh the list
+            self.load_tasks()
+
+        except FileNotFoundError:
+            with open(CSV_FILE, "w", newline="") as file:
+                writer = csv.writer(file)
+                # Add default rows or leave empty
+                writer.writerow(["Task", "Status"])
+                writer.writerow(["Sample Task 1", "Incomplete"])
+                writer.writerow(["Sample Task 2", "Incomplete"])
+            print(f"File created successfully.")
