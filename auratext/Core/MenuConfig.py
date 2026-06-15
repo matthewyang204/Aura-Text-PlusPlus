@@ -181,6 +181,7 @@ QMenu::item::selected {{
         "Beautifies and Formats the code in your current tab with pep-8 standard"
     )
     code_menu.addAction("Boilerplates", self.boilerplates)
+    code_menu.addAction("Lint Current File", self.lint_current_editor)
     code_menu.addMenu(snippet_menu)
     code_menu.addSeparator()
     

@@ -50,7 +50,7 @@ from .CommandPalette import CommandPalette
 from ..Components import powershell, terminal, statusBar, ProjectManager, About, ToDo, GitCommit, GitGraph, GitRebase, Performance, RegexPlayground
 from ..Components.CommandPalette import CommandPalette
 from ..Components.NewProjectDialog import NewProjectDialog
-from ..Components.Linter import Linter
+from ..Components.Linter import Linter, LinterMessageItem
 from ..Components.FunctionGrid import FunctionGridDialog
 from .MiniMapWidget import MiniMapWidget
 from .svg_icon_manager import SVGIconManager
@@ -558,6 +558,7 @@ class Window(QMainWindow):
             {"name": "Code: Boilerplates", "action": self.boilerplates},
             {"name": "Code: Create Snippet", "action": self.create_snippet},
             {"name": "Code: Import Snippet", "action": self.import_snippet},
+            {"name": "Code: Lint Code", "action": self.lint_current_editor},
             {"name": "Tools: Upload to Pastebin", "action": self.pastebin},
             {"name": "Tools: Notes", "action": self.notes},
             {"name": "Tools: To-Do", "action": self.todo},
@@ -921,7 +922,7 @@ class Window(QMainWindow):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         
-        self.text_editor = CodeEditor(self)
+        self.text_editor = CodeEditor(self, file_path=file_path)
         
         # Create minimap
         minimap = MiniMapWidget(self.text_editor, container)
@@ -937,14 +938,10 @@ class Window(QMainWindow):
         if not hasattr(self, 'minimap_visible'):
             self.minimap_visible = True
         minimap.setVisible(self.minimap_visible)
-        
-        # Initialize linter for Python files if enabled
-        if self._config.get("enable_linter", "True") == "True":
-            if file_path.endswith('.py') or not file_path:
-                # linter_types = self._config.get("linter_types", "flake8").split(",")
-                linter = Linter()
-                self.linters[id(self.text_editor)] = linter
-        
+
+        if not self.text_editor.linter is None:
+            self.linters[id(self.text_editor)] = self.text_editor.linter
+
         return container
 
     def getTextStats(self, widget):
@@ -2333,7 +2330,7 @@ class Window(QMainWindow):
             self.settings_widget.settings_tabs.setCurrentIndex(2)
 
     def new_document(self, checked=False, title="Scratch 1", file_path=""):
-        container = self.create_editor(file_path)
+        container = self.create_editor(file_path=file_path)
         self.current_editor = self.text_editor  # text_editor is set in create_editor
         self.current_editor.textChanged.connect(self.updateStatusBar)
         self.current_editor.cursorPositionChanged.connect(self.updateStatusBar)
@@ -2727,3 +2724,13 @@ class Window(QMainWindow):
                 return QIcon(icon_path)
 
         return QIcon()
+    
+    def lint_current_editor(self):
+        if self.current_editor.linter is None:
+            print("WARNING: Not linting due to current editor not having a 'linter' object")
+            QMessageBox.warning(self, 'Linter Warning', 'Not linting current file due to either not being a Python file or the linter not being enabled.')
+            return
+        messages = self.current_editor.linter.run(self.current_editor.text())
+        LinterMessages = LinterMessageItem(messages)
+        LinterMessages.display()
+     

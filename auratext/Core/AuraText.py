@@ -12,6 +12,7 @@ from . import Modules as ModuleFile
 from .autocomplete_engine import PythonAutocompleteEngine
 
 from auratext.Misc.boilerplates import get_font_for_platform
+from auratext.Components.Linter import Linter
 if TYPE_CHECKING:
     from .window import Window
 
@@ -78,7 +79,7 @@ class Search(QDialog):
 
 
 class CodeEditor(QsciScintilla):
-    def __init__(self, window: Window, indentType="spaces"):
+    def __init__(self, window: Window, indentType="spaces", file_path=""):
         super().__init__(parent=None)
 
         self._themes = window._themes
@@ -121,7 +122,9 @@ class CodeEditor(QsciScintilla):
             self.setIndentationsUseTabs(True)
         else:
             print(f"ERROR: Invalid indentType '{indentType}' provided. Must be of types 'spaces' or 'tabs'.")
-            sys.exit(1)
+            print(f"WARNING: Assuming 'spaces'")
+            self.setIndentationsUseTabs(False)
+            # sys.exit(1)
         self.setMarginLineNumbers(1, True)
         self.setAutoIndent(True)
         self.setMarginWidth(1, "#0000")
@@ -173,6 +176,14 @@ class CodeEditor(QsciScintilla):
 
         # Monkey-patch insert
         self.qscinsert = super(CodeEditor, self).insert
+
+        print(f"VERBOSE: Initializing editor with file path: {file_path}")
+        pyexts = ['py', 'pyw', 'pyi']
+        if file_path.rsplit(".", 1)[-1] in pyexts:
+            # linter_types = self._config.get("linter_types", "flake8").split(",")
+            self.linter = Linter()
+        else:
+            self.linter = None
         
         # Initial scan for colors
         QTimer.singleShot(100, self.update_color_previews)

@@ -13,7 +13,8 @@ import time
 import hashlib
 import atexit
 
-from PyQt6.QtCore import QObject, pyqtSignal, QTimer
+from PyQt6.QtCore import Qt, QObject, pyqtSignal, QTimer
+from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
 from PyQt6.QtGui import QColor
 from PyQt6.Qsci import QsciScintilla
 
@@ -98,3 +99,55 @@ class Linter(QObject):
             print(f"Error running pylint: {e}")
             return []
         return reporter.messages
+
+class LinterMessageItem(QDockWidget):
+    def __init__(self, messages, parent=None):
+        super().__init__('Linter Messages', parent)
+        self.messages = messages
+        self.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas)
+        self._last_status_snapshot = None
+
+        self.main_widget = QWidget()
+        self.main_layout = QVBoxLayout(self.main_widget)
+        self.header_layout = QHBoxLayout()
+        self.main_layout.addLayout(self.header_layout)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.setSpacing(0)
+
+        # Header
+        header = QLabel("Linting Results")
+        header.setStyleSheet(f"""
+            QLabel {{
+                padding: 8px 12px;
+                font-size: 11px;
+                font-weight: normal;
+                letter-spacing: 0.5px;
+            }}
+        """)
+
+        self.header_layout.addWidget(header)
+
+        self.message_display = QWidget()
+        self.message_layout = QVBoxLayout(self.message_display)
+        self.message_layout.setContentsMargins(0, 0, 0, 0)
+        self.message_layout.setSpacing(0)
+        self.main_layout.addWidget(self.message_display)
+
+    def __repr__(self):
+        return f"LinterMessageItem(messages={self.messages})"
+
+    def display(self):
+        print("Linting results:")
+        for msg in self.messages:
+            print(f"{msg.severity.upper()}: Line {msg.line}, Col {msg.column}: {msg.message} ({msg.linter}:{msg.code})")
+            msg_label = QLabel(f"{msg.severity.upper()}: Line {msg.line}, Col {msg.column}: {msg.message} ({msg.linter}:{msg.code})")
+            msg_label.setStyleSheet(f"""
+                QLabel {{
+                    padding: 6px 10px;
+                    font-size: 10px;
+                    font-weight: normal;
+                    letter-spacing: 0.5px;
+                    color: {self.get_color_for_severity(msg.severity)};
+                }}
+            """)
+            self.message_layout.addWidget(msg_label)
