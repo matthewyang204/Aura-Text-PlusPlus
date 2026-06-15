@@ -64,6 +64,10 @@ class ToDoApp(QDialog):
         self.refresh_button = QPushButton("Refresh List")
         self.refresh_button.clicked.connect(self.load_tasks)
         self.button_layout.addWidget(self.refresh_button)
+        
+        self.del_task_button = QPushButton("Delete Task")
+        self.del_task_button.clicked.connect(self.delete_task)
+        self.button_layout.addWidget(self.del_task_button)
 
         # Input field for adding tasks
         self.add_task_layout = QHBoxLayout()
@@ -165,3 +169,6 @@ class ToDoApp(QDialog):
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to add task: {e}")
+
+    def delete_task(self):
+        pass
