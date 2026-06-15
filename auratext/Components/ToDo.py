@@ -53,6 +53,7 @@ class ToDoApp(QDialog):
         # List widget to display tasks
         self.list_widget = QListWidget()
         self.layout.addWidget(self.list_widget)
+        self.list_widget.installEventFilter(self)
 
         # Buttons for actions
         self.button_layout = QHBoxLayout()
@@ -75,7 +76,7 @@ class ToDoApp(QDialog):
         self.layout.addLayout(self.add_task_layout)
 
         self.task_input = QLineEdit()
-        self.task_input.setPlaceholderText("Enter a new task")
+        self.task_input.setPlaceholderText("Enter a new task (press Enter to add)")
         self.add_task_layout.addWidget(self.task_input)
         self.task_input.installEventFilter(self)
 
@@ -91,6 +92,10 @@ class ToDoApp(QDialog):
         if obj == self.task_input and event.type() == event.Type.KeyPress:
             if event.key() == Qt.Key.Key_Return: # and event.modifiers() != Qt.KeyboardModifier.ShiftModifier
                 self.add_task()
+                return True
+        elif obj == self.list_widget and event.type() == event.Type.KeyPress:
+            if event.key() == Qt.Key.Key_Delete or event.key() == Qt.Key.Key_Backspace:
+                self.delete_task()
                 return True
         return super().eventFilter(obj, event)
 
