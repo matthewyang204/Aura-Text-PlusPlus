@@ -88,7 +88,6 @@ class ToDoApp(QDialog):
         self.load_tasks()
     
     def eventFilter(self, obj, event):
-        """Handle Enter to add"""
         if obj == self.task_input and event.type() == event.Type.KeyPress:
             if event.key() == Qt.Key.Key_Return: # and event.modifiers() != Qt.KeyboardModifier.ShiftModifier
                 self.add_task()
@@ -100,7 +99,6 @@ class ToDoApp(QDialog):
         return super().eventFilter(obj, event)
 
     def load_tasks(self):
-        """Load tasks from the CSV file into the list widget."""
         self.list_widget.clear()
         try:
             with open(CSV_FILE, "r", newline="") as file:
@@ -122,7 +120,6 @@ class ToDoApp(QDialog):
             print(f"File created successfully.")
 
     def mark_as_complete(self):
-        """Mark the selected task as complete and update the CSV file."""
         selected_items = self.list_widget.selectedItems()
         if not selected_items:
             QMessageBox.warning(self, "Warning", "Please select a task to mark as complete.")
@@ -161,7 +158,6 @@ class ToDoApp(QDialog):
             print(f"File created successfully.")
 
     def add_task(self):
-        """Add a new task to the to-do list and update the CSV file."""
         task_name = self.task_input.text().strip()
         if not task_name:
             QMessageBox.warning(self, "Warning", "Task name cannot be empty.")
