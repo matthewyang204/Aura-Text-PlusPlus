@@ -133,8 +133,6 @@ class ToDoApp(QDialog):
                 writer = csv.writer(file)
                 writer.writerows(updated_rows)
 
-            QMessageBox.information(self, "Success", f"Task '{task_name}' marked as complete.")
-
             # Refresh the list
             self.load_tasks()
 
@@ -158,8 +156,6 @@ class ToDoApp(QDialog):
             with open(CSV_FILE, "a", newline="") as file:
                 writer = csv.writer(file)
                 writer.writerow([task_name, "Incomplete"])
-
-            QMessageBox.information(self, "Success", f"Task '{task_name}' added successfully.")
 
             # Clear the input field
             self.task_input.clear()
