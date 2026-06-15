@@ -50,7 +50,7 @@ from .CommandPalette import CommandPalette
 from ..Components import powershell, terminal, statusBar, ProjectManager, About, ToDo, GitCommit, GitGraph, GitRebase, Performance, RegexPlayground
 from ..Components.CommandPalette import CommandPalette
 from ..Components.NewProjectDialog import NewProjectDialog
-from ..Components.Linter import CodeLinter
+from ..Components import Linter
 from ..Components.FunctionGrid import FunctionGridDialog
 from .MiniMapWidget import MiniMapWidget
 from .svg_icon_manager import SVGIconManager
@@ -941,8 +941,8 @@ class Window(QMainWindow):
         # Initialize linter for Python files if enabled
         if self._config.get("enable_linter", "True") == "True":
             if file_path.endswith('.py') or not file_path:
-                linter_types = self._config.get("linter_types", "flake8").split(",")
-                linter = CodeLinter(self.text_editor, file_path, linter_types)
+                # linter_types = self._config.get("linter_types", "flake8").split(",")
+                linter = Linter()
                 self.linters[id(self.text_editor)] = linter
         
         return container
