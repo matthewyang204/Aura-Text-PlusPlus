@@ -39,7 +39,10 @@ PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputBaseFilename=Aura-Text++-setup-{#MyAppVersion}-x64
 SetupIconFile=icon.ico
+Compression=lzma2/max
 SolidCompression=yes
+LZMADictionarySize=16384
+LZMABlockSize=65536
 WizardStyle=modern
 
 [Languages]
