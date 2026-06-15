@@ -2733,4 +2733,5 @@ class Window(QMainWindow):
         messages = self.current_editor.linter.run(self.current_editor.text())
         LinterMessages = LinterMessageItem(messages)
         LinterMessages.display()
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, LinterMessages)
      

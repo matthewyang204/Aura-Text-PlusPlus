@@ -133,21 +133,25 @@ class LinterMessageItem(QDockWidget):
         self.message_layout.setSpacing(0)
         self.main_layout.addWidget(self.message_display)
 
+        self.setWidget(self.main_widget)
+
     def __repr__(self):
         return f"LinterMessageItem(messages={self.messages})"
 
     def display(self):
         print("Linting results:")
         for msg in self.messages:
-            print(f"{msg.severity.upper()}: Line {msg.line}, Col {msg.column}: {msg.message} ({msg.linter}:{msg.code})")
-            msg_label = QLabel(f"{msg.severity.upper()}: Line {msg.line}, Col {msg.column}: {msg.message} ({msg.linter}:{msg.code})")
+            severity = msg.msg_id[0].upper()
+
+            print(f"{severity}: Line {msg.line}, Col {msg.column}: {msg.msg} ({msg.msg_id}:{msg.symbol})")
+
+            msg_label = QLabel(f"{severity}: Line {msg.line}, Col {msg.column}: {msg.msg} ({msg.msg_id}:{msg.symbol})")
             msg_label.setStyleSheet(f"""
                 QLabel {{
                     padding: 6px 10px;
                     font-size: 10px;
                     font-weight: normal;
                     letter-spacing: 0.5px;
-                    color: {self.get_color_for_severity(msg.severity)};
                 }}
             """)
             self.message_layout.addWidget(msg_label)
