@@ -6,6 +6,7 @@ import sys
 from auratext.Misc.import_res import notepadequalequalComponentImportPathAppend
 sys.path.append(notepadequalequalComponentImportPathAppend)
 
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QVBoxLayout, QListWidget, QPushButton, QHBoxLayout, QMessageBox, QDialog, QLineEdit
 )
@@ -52,6 +53,7 @@ class ToDoApp(QDialog):
         # List widget to display tasks
         self.list_widget = QListWidget()
         self.layout.addWidget(self.list_widget)
+        self.list_widget.installEventFilter(self)
 
         # Buttons for actions
         self.button_layout = QHBoxLayout()
@@ -64,14 +66,19 @@ class ToDoApp(QDialog):
         self.refresh_button = QPushButton("Refresh List")
         self.refresh_button.clicked.connect(self.load_tasks)
         self.button_layout.addWidget(self.refresh_button)
+        
+        self.del_task_button = QPushButton("Delete Task")
+        self.del_task_button.clicked.connect(self.delete_task)
+        self.button_layout.addWidget(self.del_task_button)
 
         # Input field for adding tasks
         self.add_task_layout = QHBoxLayout()
         self.layout.addLayout(self.add_task_layout)
 
         self.task_input = QLineEdit()
-        self.task_input.setPlaceholderText("Enter a new task")
+        self.task_input.setPlaceholderText("Enter a new task (press Enter to add)")
         self.add_task_layout.addWidget(self.task_input)
+        self.task_input.installEventFilter(self)
 
         self.add_task_button = QPushButton("Add Task")
         self.add_task_button.clicked.connect(self.add_task)
@@ -79,9 +86,19 @@ class ToDoApp(QDialog):
 
         # Load tasks from the CSV file
         self.load_tasks()
+    
+    def eventFilter(self, obj, event):
+        if obj == self.task_input and event.type() == event.Type.KeyPress:
+            if event.key() == Qt.Key.Key_Return: # and event.modifiers() != Qt.KeyboardModifier.ShiftModifier
+                self.add_task()
+                return True
+        elif obj == self.list_widget and event.type() == event.Type.KeyPress:
+            if event.key() == Qt.Key.Key_Delete or event.key() == Qt.Key.Key_Backspace:
+                self.delete_task()
+                return True
+        return super().eventFilter(obj, event)
 
     def load_tasks(self):
-        """Load tasks from the CSV file into the list widget."""
         self.list_widget.clear()
         try:
             with open(CSV_FILE, "r", newline="") as file:
@@ -103,7 +120,6 @@ class ToDoApp(QDialog):
             print(f"File created successfully.")
 
     def mark_as_complete(self):
-        """Mark the selected task as complete and update the CSV file."""
         selected_items = self.list_widget.selectedItems()
         if not selected_items:
             QMessageBox.warning(self, "Warning", "Please select a task to mark as complete.")
@@ -129,8 +145,6 @@ class ToDoApp(QDialog):
                 writer = csv.writer(file)
                 writer.writerows(updated_rows)
 
-            QMessageBox.information(self, "Success", f"Task '{task_name}' marked as complete.")
-
             # Refresh the list
             self.load_tasks()
 
@@ -144,7 +158,6 @@ class ToDoApp(QDialog):
             print(f"File created successfully.")
 
     def add_task(self):
-        """Add a new task to the to-do list and update the CSV file."""
         task_name = self.task_input.text().strip()
         if not task_name:
             QMessageBox.warning(self, "Warning", "Task name cannot be empty.")
@@ -155,8 +168,6 @@ class ToDoApp(QDialog):
                 writer = csv.writer(file)
                 writer.writerow([task_name, "Incomplete"])
 
-            QMessageBox.information(self, "Success", f"Task '{task_name}' added successfully.")
-
             # Clear the input field
             self.task_input.clear()
 
@@ -165,3 +176,41 @@ class ToDoApp(QDialog):
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to add task: {e}")
+
+    def delete_task(self):
+        selected_items = self.list_widget.selectedItems()
+        if not selected_items:
+            QMessageBox.warning(self, "Warning", "Please select a task to delete.")
+            return
+
+        selected_task = selected_items[0].text()
+        task_name = selected_task.split(" [")[0]  # Extract the task name
+
+        updated_rows = []
+        try:
+            with open(CSV_FILE, "r", newline="") as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    if len(row) != 2:
+                        continue
+                    task, status = row
+                    if not task == task_name:
+                        updated_rows.append(row)
+            
+            with open(CSV_FILE, "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(updated_rows)
+
+            # QMessageBox.information(self, "Success", f"Task '{task_name}' deleted.")
+
+            # Refresh the list
+            self.load_tasks()
+
+        except FileNotFoundError:
+            with open(CSV_FILE, "w", newline="") as file:
+                writer = csv.writer(file)
+                # Add default rows or leave empty
+                writer.writerow(["Task", "Status"])
+                writer.writerow(["Sample Task 1", "Incomplete"])
+                writer.writerow(["Sample Task 2", "Incomplete"])
+            print(f"File created successfully.")
