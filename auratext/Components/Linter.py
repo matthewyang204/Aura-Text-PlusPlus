@@ -92,7 +92,7 @@ class Linter(QObject):
         reporter = CollectingReporter()
         timehash = self.generate_timehash()
         filename = os.path.join(self.tempdir, f"{timehash}.py")
-        write_file(filename, content, encoding='utf-8')
+        write_file(content, filename, encoding='utf-8')
         try:
             Run([filename], reporter=reporter, exit=False)
         except Exception as e:
