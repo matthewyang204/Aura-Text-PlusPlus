@@ -191,7 +191,7 @@ class CodeEditor(QsciScintilla):
         if file_path.rsplit(".", 1)[-1] in pyexts:
             # linter_types = self._config.get("linter_types", "flake8").split(",")
             self.linter = Linter()
-            self.linter_in_editor = LinterForEditor()
+            self.linter_in_editor = LinterForEditor(parent=self)
         else:
             self.linter = None
         
