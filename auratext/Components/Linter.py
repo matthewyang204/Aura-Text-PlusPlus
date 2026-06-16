@@ -212,7 +212,7 @@ class LinterMessageItem(QDockWidget):
         print("Linting results:")
         lintMsgStr = ""
         for msg in messages:
-            severity = msg.msg_id[0].upper()
+            severity = msg.msg_id.upper()
 
             print(f"{severity}: Line {msg.line}, Col {msg.column}: {msg.msg} ({msg.msg_id}:{msg.symbol})")
 
