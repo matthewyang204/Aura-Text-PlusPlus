@@ -116,7 +116,7 @@ class LinterForEditor(QObject):
         self.lint_timer = QTimer(self)
         self.lint_timer.setTimerType(Qt.TimerType.PreciseTimer)
         self.lint_timer.setSingleShot(True)
-        self.lint_timer.timeout.connect(self.reanalyze)
+        self.lint_timer.timeout.connect(lambda: QTimer.singleShot(0, self.reanalyze))
         self.parent.textChanged.connect(self.live)
 
     def _setup_markers(self):
@@ -140,9 +140,6 @@ class LinterForEditor(QObject):
 
     def display(self, messages):
         self.clearMarkers()
-
-        content = self.editor.text()
-        messages = self.editor.linter.run(content)
 
         for msg in messages:
             severity = msg.msg_id[0].upper()
