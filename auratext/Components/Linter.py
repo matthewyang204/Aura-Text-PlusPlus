@@ -104,14 +104,35 @@ class LinterForEditor(QObject):
     def __init__(self, parent=None):
         super().__init__('Linter In Editor', parent)
         self.parent = parent
+        self.editor = parent
         if not isinstance(self.parent, QsciScintilla):
             raise TypeError("LinterInEditor must be attached to a QsciScintilla or CodeEditor")
+        self._setup_markers()
 
         self.lint_timer = QTimer(self)
         self.lint_timer.setTimerType(Qt.TimerType.PreciseTimer)
         self.lint_timer.setSingleShot(True)
         self.lint_timer.timeout.connect(self.reanalyze)
         self.parent.textChanged.connect(self.live)
+
+    def _setup_markers(self):
+        # Error marker (red circle with X)
+        self.editor.markerDefine(QsciScintilla.MarkerSymbol.Circle, self.ERROR_MARKER)
+        self.editor.setMarkerBackgroundColor(QColor("#FF0000"), self.ERROR_MARKER)
+        self.editor.setMarkerForegroundColor(QColor("#FFFFFF"), self.ERROR_MARKER)
+
+        # Warning marker (yellow triangle)
+        self.editor.markerDefine(QsciScintilla.MarkerSymbol.RightTriangle, self.WARNING_MARKER)
+        self.editor.setMarkerBackgroundColor(QColor("#FFA500"), self.WARNING_MARKER)
+        self.editor.setMarkerForegroundColor(QColor("#000000"), self.WARNING_MARKER)
+
+        # Info marker (blue circle)
+        self.editor.markerDefine(QsciScintilla.MarkerSymbol.Circle, self.INFO_MARKER)
+        self.editor.setMarkerBackgroundColor(QColor("#0080FF"), self.INFO_MARKER)
+        self.editor.setMarkerForegroundColor(QColor("#FFFFFF"), self.INFO_MARKER)
+
+        # Enable annotations
+        self.editor.setAnnotationDisplay(QsciScintilla.AnnotationDisplay.AnnotationBoxed)
 
     def display(self, messages):
         pass
