@@ -2731,7 +2731,7 @@ class Window(QMainWindow):
             QMessageBox.warning(self, 'Linter Warning', 'Not linting current file due to either not being a Python file or the linter not being enabled.')
             return
         messages = self.current_editor.linter.run(self.current_editor.text())
-        LinterMessages = LinterMessageItem(messages)
+        LinterMessages = LinterMessageItem(messages, parent=self)
         LinterMessages.display()
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, LinterMessages)
-     
+        return LinterMessages
