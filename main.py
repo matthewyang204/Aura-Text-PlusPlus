@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import shutil
 import platform
 from auratext.Misc.quirks import copy_if_not_exists
@@ -26,8 +27,6 @@ else:
     os.environ["QT_LOGGING_RULES"] = ";".join(required_qt_rules)
 
 from PyQt6.QtWidgets import QApplication
-import sys
-
 from qt_material import apply_stylesheet
 
 """
