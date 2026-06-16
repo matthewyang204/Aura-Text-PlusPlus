@@ -100,6 +100,29 @@ class Linter(QObject):
             return []
         return reporter.messages
 
+class LinterForEditor(QObject):
+    def __init__(self, parent=None):
+        super().__init__('Linter In Editor', parent)
+        self.parent = parent
+        if not isinstance(self.parent, QsciScintilla):
+            raise TypeError("LinterInEditor must be attached to a QsciScintilla or CodeEditor")
+
+        self.lint_timer = QTimer(self)
+        self.lint_timer.setTimerType(Qt.TimerType.PreciseTimer)
+        self.lint_timer.setSingleShot(True)
+        self.lint_timer.timeout.connect(self.reanalyze)
+        self.parent.textChanged.connect(self.live)
+
+    def display(self, messages):
+        pass
+
+    def reanalyze(self):
+        pass
+
+    def live(self):
+        self.lint_timer.stop()
+        self.lint_timer.start(500)
+
 class LinterMessageItem(QDockWidget):
     def __init__(self, messages, parent=None):
         super().__init__('Linter Messages', parent)
