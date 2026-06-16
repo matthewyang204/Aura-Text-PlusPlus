@@ -11,7 +11,7 @@ import atexit
 import shutil
 import getpass
 
-from PyQt6.QtCore import Qt, QObject, pyqtSignal, QTimer
+from PyQt6.QtCore import Qt, QObject, pyqtSignal, QTimer, QThread
 from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton, QMessageBox
 from PyQt6.QtGui import QColor
 from PyQt6.Qsci import QsciScintilla
@@ -161,10 +161,27 @@ class LinterForEditor(QObject):
         self.editor.markerDeleteAll(self.WARNING_MARKER)
         self.editor.markerDeleteAll(self.INFO_MARKER)
 
+    class LintWorker(QObject):
+        finished = pyqtSignal(list)
+
+        def __init__(self, linter, text):
+            super().__init__()
+            self.linter = linter
+            self.text = text
+
+        def run(self):
+            messages = self.linter.run(self.text)
+            self.finished.emit(messages)
+
     def reanalyze(self):
         text = self.editor.text()
-        messages = self.editor.linter.run(text)
-        self.display(messages)
+        self.thread = QThread()
+        self.worker = self.LintWorker(self.editor.linter, text)
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.display)
+        self.worker.finished.connect(self.thread.quit)
+        self.thread.start()
 
     def live(self):
         self.lint_timer.stop()
