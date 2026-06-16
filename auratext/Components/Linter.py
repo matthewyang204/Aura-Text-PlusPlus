@@ -107,6 +107,10 @@ class LinterForEditor(QObject):
         self.editor = parent
         if not isinstance(self.parent, QsciScintilla):
             raise TypeError("LinterInEditor must be attached to a QsciScintilla or CodeEditor")
+
+        self.ERROR_MARKER = 0
+        self.WARNING_MARKER = 1
+        self.INFO_MARKER = 2
         self._setup_markers()
 
         self.lint_timer = QTimer(self)
@@ -135,10 +139,35 @@ class LinterForEditor(QObject):
         self.editor.setAnnotationDisplay(QsciScintilla.AnnotationDisplay.AnnotationBoxed)
 
     def display(self, messages):
-        pass
+        self.clearMarkers()
+
+        content = self.editor.text()
+        messages = self.editor.linter.run(content)
+
+        for msg in messages:
+            severity = msg.msg_id.upper()
+            annotation = f"{msg.msg} ({msg.msg_id}:{msg.symbol})"
+            line = msg.line
+
+            if severity == "E":
+                self.editor.markerAdd(line, self.ERROR_MARKER)
+            elif severity == "W":
+                self.editor.markerAdd(line, self.WARNING_MARKER)
+            elif severity == "C":
+                self.editor.markerAdd(line, self.INFO_MARKER)
+            else:
+                self.editor.markerAdd(line, self.INFO_MARKER)
+            self.editor.annotate(line, annotation, 0)
+
+    def clearMarkers(self):
+        self.editor.markerDeleteAll(self.ERROR_MARKER)
+        self.editor.markerDeleteAll(self.WARNING_MARKER)
+        self.editor.markerDeleteAll(self.INFO_MARKER)
 
     def reanalyze(self):
-        pass
+        text = self.editor.text()
+        messages = self.editor.linter.run(text)
+        self.display(messages)
 
     def live(self):
         self.lint_timer.stop()
