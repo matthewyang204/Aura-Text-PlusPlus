@@ -558,7 +558,7 @@ class Window(QMainWindow):
             {"name": "Code: Boilerplates", "action": self.boilerplates},
             {"name": "Code: Create Snippet", "action": self.create_snippet},
             {"name": "Code: Import Snippet", "action": self.import_snippet},
-            {"name": "Code: Lint Code", "action": self.lint_current_editor},
+            {"name": "Code: Lint Current File To Side Window", "action": self.lint_current_editor},
             {"name": "Tools: Upload to Pastebin", "action": self.pastebin},
             {"name": "Tools: Notes", "action": self.notes},
             {"name": "Tools: To-Do", "action": self.todo},
