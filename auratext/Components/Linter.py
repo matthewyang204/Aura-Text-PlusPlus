@@ -145,7 +145,7 @@ class LinterForEditor(QObject):
         messages = self.editor.linter.run(content)
 
         for msg in messages:
-            severity = msg.msg_id.upper()
+            severity = msg.msg_id[0].upper()
             annotation = f"{msg.msg} ({msg.msg_id}:{msg.symbol})"
             line = msg.line
 
