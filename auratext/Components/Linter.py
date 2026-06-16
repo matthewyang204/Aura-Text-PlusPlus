@@ -191,7 +191,7 @@ class LinterMessageItem(QDockWidget):
             self.msg_label.setText(lintMsgStr)
 
     def reanalyze(self):
-        if self.parent.current_editor.linter is None:
+        if self.parent.current_editor is None or self.parent.current_editor.linter is None:
             print("WARNING: Not linting due to current editor not having a 'linter' object")
             return
         messages = self.parent.current_editor.linter.run(self.parent.current_editor.text())
