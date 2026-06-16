@@ -74,6 +74,7 @@ class Linter(QObject):
             try:
                 shutil.rmtree(self.tempdir)
                 print("Cleaned up code linter temp directory successfully.")
+                self._destroyed = True
             except Exception as e:
                 print(f"Error cleaning up temp directory: {e}")
 
