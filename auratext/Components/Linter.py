@@ -125,13 +125,13 @@ class LinterForEditor(QObject):
         self.editor.setMarkerBackgroundColor(QColor("#FF0000"), self.ERROR_MARKER)
         self.editor.setMarkerForegroundColor(QColor("#FFFFFF"), self.ERROR_MARKER)
 
-        # Warning marker (yellow triangle)
-        self.editor.markerDefine(QsciScintilla.MarkerSymbol.RightTriangle, self.WARNING_MARKER)
+        # Warning marker (yellow circle)
+        self.editor.markerDefine(QsciScintilla.MarkerSymbol.Circle, self.WARNING_MARKER)
         self.editor.setMarkerBackgroundColor(QColor("#FFA500"), self.WARNING_MARKER)
         self.editor.setMarkerForegroundColor(QColor("#000000"), self.WARNING_MARKER)
 
-        # Info marker (blue circle)
-        self.editor.markerDefine(QsciScintilla.MarkerSymbol.Circle, self.INFO_MARKER)
+        # Info marker (blue triangle)
+        self.editor.markerDefine(QsciScintilla.MarkerSymbol.RightTriangle, self.INFO_MARKER)
         self.editor.setMarkerBackgroundColor(QColor("#0080FF"), self.INFO_MARKER)
         self.editor.setMarkerForegroundColor(QColor("#FFFFFF"), self.INFO_MARKER)
 
