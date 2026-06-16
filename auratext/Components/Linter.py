@@ -147,7 +147,7 @@ class LinterForEditor(QObject):
         for msg in messages:
             severity = msg.msg_id[0].upper()
             annotation = f"{msg.msg} ({msg.msg_id}:{msg.symbol})"
-            line = msg.line
+            line = msg.line - 1
 
             if severity == "E":
                 self.editor.markerAdd(line, self.ERROR_MARKER)
