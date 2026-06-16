@@ -12,7 +12,7 @@ import shutil
 import getpass
 
 from PyQt6.QtCore import Qt, QObject, pyqtSignal, QTimer
-from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea
+from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton
 from PyQt6.QtGui import QColor
 from PyQt6.Qsci import QsciScintilla
 
@@ -105,13 +105,25 @@ class LinterMessageItem(QDockWidget):
         self.messages = messages
         self.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas)
         self._last_status_snapshot = None
+        self.parent = parent
 
         self.main_widget = QWidget()
         self.main_layout = QVBoxLayout(self.main_widget)
         self.header_layout = QHBoxLayout()
+        self.button_layout = QHBoxLayout()
+        self.main_layout.addLayout(self.button_layout)
         self.main_layout.addLayout(self.header_layout)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setSpacing(0)
+
+        # Top buttons
+        self.reanalyze_button = QPushButton("Reanalyze")
+        self.reanalyze_button.clicked.connect(self.reanalyze)
+        self.button_layout.addWidget(self.reanalyze_button)
+
+        self.live_button = QPushButton("Live Refresh (every 1.5 seconds)")
+        self.live_button.clicked.connect(self.live)
+        self.button_layout.addWidget(self.live_button)
 
         # Header
         header = QLabel("Linting Results")
@@ -164,3 +176,9 @@ class LinterMessageItem(QDockWidget):
         """)
         msg_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.message_layout.addWidget(msg_label)
+
+    def reanalyze(self):
+        pass
+
+    def live(self):
+        pass
