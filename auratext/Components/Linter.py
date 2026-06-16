@@ -118,13 +118,9 @@ class LinterMessageItem(QDockWidget):
         self.main_layout.setSpacing(0)
 
         # Top buttons
-        self.reanalyze_button = QPushButton("Reanalyze")
+        self.reanalyze_button = QPushButton("Force Reanalyzation")
         self.reanalyze_button.clicked.connect(self.reanalyze)
         self.button_layout.addWidget(self.reanalyze_button)
-
-        self.live_button = QPushButton("Live Refresh (every 1.5 seconds)")
-        self.live_button.clicked.connect(self.live)
-        self.button_layout.addWidget(self.live_button)
 
         # Header
         header = QLabel("Linting Results")
@@ -147,6 +143,12 @@ class LinterMessageItem(QDockWidget):
         self.scroll = QScrollArea()
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(self.message_display)
+
+        self.lint_timer = QTimer(self)
+        self.lint_timer.setTimerType(Qt.TimerType.PreciseTimer)
+        self.lint_timer.setSingleShot(True)
+        self.lint_timer.timeout.connect(self.reanalyze)
+        self.parent.current_editor.textChanged.connect(self.live)
 
         self.main_layout.addWidget(self.scroll)
 
@@ -196,4 +198,5 @@ class LinterMessageItem(QDockWidget):
         self.display(messages=messages)
 
     def live(self):
-        pass
+        self.lint_timer.stop()
+        self.lint_timer.start(500)
