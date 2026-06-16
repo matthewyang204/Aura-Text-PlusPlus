@@ -152,13 +152,20 @@ class LinterMessageItem(QDockWidget):
 
         self.setWidget(self.main_widget)
 
+        # Uninitialized widgets
+        self.msg_label = None
+
     def __repr__(self):
         return f"LinterMessageItem(messages={self.messages})"
 
-    def display(self):
+    def display(self, messages=None):
+        if messages is None:
+            messages = self.messages
+        else:
+            self.messages = messages
         print("Linting results:")
         lintMsgStr = ""
-        for msg in self.messages:
+        for msg in messages:
             severity = msg.msg_id[0].upper()
 
             print(f"{severity}: Line {msg.line}, Col {msg.column}: {msg.msg} ({msg.msg_id}:{msg.symbol})")
@@ -166,20 +173,27 @@ class LinterMessageItem(QDockWidget):
             new_line = f"{severity}: Line {msg.line}, Col {msg.column}: {msg.msg} ({msg.msg_id}:{msg.symbol})"
             lintMsgStr += new_line + '\n\n'
         
-        msg_label = QLabel(lintMsgStr)
-        msg_label.setStyleSheet(f"""
-            QLabel {{
-                padding: 6px 10px;
-                font-size: 10px;
-                font-weight: normal;
-                letter-spacing: 0.5px;
-            }}
-        """)
-        msg_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-        self.message_layout.addWidget(msg_label)
+        if self.msg_label is None:
+            self.msg_label = QLabel(lintMsgStr)
+            self.msg_label.setStyleSheet(f"""
+                QLabel {{
+                    padding: 6px 10px;
+                    font-size: 10px;
+                    font-weight: normal;
+                    letter-spacing: 0.5px;
+                }}
+            """)
+            self.msg_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+            self.message_layout.addWidget(self.msg_label)
+        else:
+            self.msg_label.setText(lintMsgStr)
 
     def reanalyze(self):
-        pass
+        if self.parent.current_editor.linter is None:
+            print("WARNING: Not linting due to current editor not having a 'linter' object")
+            return
+        messages = self.parent.current_editor.linter.run(self.parent.current_editor.text())
+        self.display(messages=messages)
 
     def live(self):
         pass
