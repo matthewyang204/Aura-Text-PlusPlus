@@ -148,6 +148,15 @@ class CodeEditor(QsciScintilla):
         self.setBackspaceUnindents(True)
         self.setIndentationGuides(True)
         self.setReadOnly(False)
+        self.setMarginType(0, QsciScintilla.MarginType.SymbolMargin)
+        self.setMarginWidth(0, 12)
+        self.BREAKPOINT_MARKER = 10
+        self.markerDefine(QsciScintilla.MarkerSymbol.Circle, self.BREAKPOINT_MARKER)
+        self.setMarkerBackgroundColor(QColor("#ff5555"), self.BREAKPOINT_MARKER)
+        self.setMarkerForegroundColor(QColor("#ffffff"), self.BREAKPOINT_MARKER)
+        self.setMarginSensitivity(0, True)
+        self.marginClicked.connect(self.on_margin_clicked)
+        self.breakpoints = set()
 
         self.context_menu = QMenu(self)
 
@@ -429,6 +438,18 @@ class CodeEditor(QsciScintilla):
                     return
         
         super().mouseMoveEvent(event)
+
+    def on_margin_clicked(self, margin, line, state):
+        if margin != 0:
+            return
+
+        marker = self.BREAKPOINT_MARKER
+        if line in self.breakpoints:
+            self.breakpoints.remove(line)
+            self.markerDelete(line, marker)
+        else:
+            self.breakpoints.add(line)
+            self.markerAdd(line, marker)
     
     def show_color_tooltip(self, global_pos, color_str):
         """Show a tooltip with color preview"""
