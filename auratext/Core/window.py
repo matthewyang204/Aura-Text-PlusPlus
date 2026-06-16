@@ -2726,7 +2726,11 @@ class Window(QMainWindow):
         return QIcon()
     
     def lint_current_editor(self):
-        if self.current_editor.linter is None:
+        if not isinstance(self.current_editor, QsciScintilla):
+            print("WARNING: Not linting due to current editor not having a 'linter' object")
+            QMessageBox.warning(self, 'Linter Warning', 'Not linting because no editor is open')
+            return
+        elif self.current_editor.linter is None:
             print("WARNING: Not linting due to current editor not having a 'linter' object")
             QMessageBox.warning(self, 'Linter Warning', 'Not linting current file due to either not being a Python file or the linter not being enabled.')
             return

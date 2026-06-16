@@ -12,7 +12,7 @@ import shutil
 import getpass
 
 from PyQt6.QtCore import Qt, QObject, pyqtSignal, QTimer
-from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton
+from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton, QMessageBox
 from PyQt6.QtGui import QColor
 from PyQt6.Qsci import QsciScintilla
 
@@ -191,7 +191,11 @@ class LinterMessageItem(QDockWidget):
             self.msg_label.setText(lintMsgStr)
 
     def reanalyze(self):
-        if self.parent.current_editor is None or self.parent.current_editor.linter is None:
+        if not isinstance(self.parent.current_editor, QsciScintilla):
+            print("WARNING: Not linting due to current editor not having a 'linter' object")
+            QMessageBox.warning(self, 'Linter Warning', 'Not linting because no editor is open')
+            return
+        elif self.parent.current_editor.linter is None:
             print("WARNING: Not linting due to current editor not having a 'linter' object")
             return
         messages = self.parent.current_editor.linter.run(self.parent.current_editor.text())
