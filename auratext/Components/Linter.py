@@ -102,7 +102,7 @@ class Linter(QObject):
 
 class LinterForEditor(QObject):
     def __init__(self, parent=None):
-        super().__init__('Linter In Editor', parent)
+        super().__init__(parent)
         self.parent = parent
         self.editor = parent
         if not isinstance(self.parent, QsciScintilla):
