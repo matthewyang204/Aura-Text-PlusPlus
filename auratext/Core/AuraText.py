@@ -155,6 +155,7 @@ class CodeEditor(QsciScintilla):
         self.setMarkerBackgroundColor(QColor("#ff5555"), self.BREAKPOINT_MARKER)
         self.setMarkerForegroundColor(QColor("#ffffff"), self.BREAKPOINT_MARKER)
         self.setMarginSensitivity(0, True)
+        self.setMarginSensitivity(1, True)
         self.marginClicked.connect(self.on_margin_clicked)
         self.breakpoints = set()
 
@@ -441,8 +442,8 @@ class CodeEditor(QsciScintilla):
         super().mouseMoveEvent(event)
 
     def on_margin_clicked(self, margin, line, state):
-        if margin != 0:
-            return
+        # if margin != 0:
+        #     return
 
         marker = self.BREAKPOINT_MARKER
         if line in self.breakpoints:
