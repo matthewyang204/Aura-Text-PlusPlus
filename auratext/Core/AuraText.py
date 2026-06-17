@@ -442,8 +442,8 @@ class CodeEditor(QsciScintilla):
         super().mouseMoveEvent(event)
 
     def on_margin_clicked(self, margin, line, state):
-        # if margin != 0:
-        #     return
+        if margin != 0 and margin != 1:
+            return
 
         marker = self.BREAKPOINT_MARKER
         if line in self.breakpoints:
