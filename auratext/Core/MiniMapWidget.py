@@ -142,7 +142,7 @@ class MiniMapWidget(QWidget):
         self.char_width = metrics.horizontalAdvance('X') * 0.5
         
         # Draw code lines with actual text
-        y_offset = 0
+        y_offset = -self._scroll_offset
         for i, line in enumerate(self.cached_lines):
             if y_offset > self.height():
                 break
