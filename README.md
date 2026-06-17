@@ -128,7 +128,7 @@ We need the prerequisites above. After getting them, you can run the program wit
 
 ## Development 
 
-![Alt](https://repobeats.axiom.co/api/embed/c434d3574ecb6709009acf81a6b7bc0546cab9af.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/c434d3574ecb6709009acf81a6b7bc0546cab9af.svg "Repobeats analytics")
 <br>
 
 ## Roadmap
@@ -158,18 +158,6 @@ Don't forget to give the project a star! Thanks again!
 </a>
 
 <br>
-
-<!-- GitAds-Verify: WQAFQASC2KGFLIXDWYMOWLYFQMBXX9GJ -->
-<!-- LICENSE -->
-
-## As Featured On
-
-<!-- To be added. References include Medevel, Adafruit, etc -->
-
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-## GitAds Sponsorship
-## GitAds Sponsored
-[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=matthewyang204/aura-text@github)](https://gitads.dev/v1/ad-track?source=matthewyang204/aura-text@github)
+Distributed under the MIT License. See `LICENSE` for more information.
