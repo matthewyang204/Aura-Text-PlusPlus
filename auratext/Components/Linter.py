@@ -14,7 +14,7 @@ import getpass
 from PyQt6.QtCore import Qt, QObject, pyqtSignal, QTimer, QThread
 from PyQt6.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton, QMessageBox
 from PyQt6.QtGui import QColor
-from PyQt6.Qsci import QsciScintilla
+from PyQt6.Qsci import QsciScintilla, QsciScintillaBase
 
 from pylint.lint import Run
 from pylint.reporters import BaseReporter
@@ -160,6 +160,7 @@ class LinterForEditor(QObject):
         self.editor.markerDeleteAll(self.ERROR_MARKER)
         self.editor.markerDeleteAll(self.WARNING_MARKER)
         self.editor.markerDeleteAll(self.INFO_MARKER)
+        self.editor.SendScintilla(QsciScintillaBase.SCI_ANNOTATIONCLEARALL)
 
     class LintWorker(QObject):
         finished = pyqtSignal(list)
