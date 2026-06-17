@@ -127,14 +127,14 @@ class CodeEditor(QsciScintilla):
             # sys.exit(1)
         self.setMarginLineNumbers(1, True)
         self.setAutoIndent(True)
-        self.setMarginWidth(1, "#0000")
-        left_margin_index = 0
-        left_margin_width = 7
+        self.setMarginWidth(1, " #0000")
+        # left_margin_index = 0
+        # left_margin_width = 7
         self.setMarginsForegroundColor(QColor(window._themes["lines_fg"]))
         self.setMarginsBackgroundColor(QColor(window._themes["lines_theme"]))
         font_metrics = QFontMetrics(self.font())
-        left_margin_width_pixels = font_metrics.horizontalAdvance(" ") * left_margin_width
-        self.SendScintilla(self.SCI_SETMARGINLEFT, left_margin_index, left_margin_width_pixels)
+        # left_margin_width_pixels = font_metrics.horizontalAdvance(" ") * left_margin_width
+        # self.SendScintilla(self.SCI_SETMARGINLEFT, left_margin_index, left_margin_width_pixels)
         self.setFolding(QsciScintilla.FoldStyle.BoxedTreeFoldStyle)
         self.setMarginSensitivity(2, True)
         self.setFoldMarginColors(
@@ -149,12 +149,13 @@ class CodeEditor(QsciScintilla):
         self.setIndentationGuides(True)
         self.setReadOnly(False)
         self.setMarginType(0, QsciScintilla.MarginType.SymbolMargin)
-        self.setMarginWidth(0, 12)
+        self.setMarginWidth(0, "#0000")
         self.BREAKPOINT_MARKER = 10
         self.markerDefine(QsciScintilla.MarkerSymbol.Circle, self.BREAKPOINT_MARKER)
         self.setMarkerBackgroundColor(QColor("#ff5555"), self.BREAKPOINT_MARKER)
         self.setMarkerForegroundColor(QColor("#ffffff"), self.BREAKPOINT_MARKER)
         self.setMarginSensitivity(0, True)
+        self.setMarginSensitivity(1, True)
         self.marginClicked.connect(self.on_margin_clicked)
         self.breakpoints = set()
 
@@ -441,7 +442,7 @@ class CodeEditor(QsciScintilla):
         super().mouseMoveEvent(event)
 
     def on_margin_clicked(self, margin, line, state):
-        if margin != 0:
+        if margin != 0 and margin != 1:
             return
 
         marker = self.BREAKPOINT_MARKER
