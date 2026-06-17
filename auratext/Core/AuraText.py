@@ -127,7 +127,8 @@ class CodeEditor(QsciScintilla):
             # sys.exit(1)
         self.setMarginLineNumbers(1, True)
         self.setAutoIndent(True)
-        self.setMarginWidth(1, " #0000")
+        self._update_line_number_margin_width()
+        self.linesChanged.connect(self._update_line_number_margin_width)
         # left_margin_index = 0
         # left_margin_width = 7
         self.setMarginsForegroundColor(QColor(window._themes["lines_fg"]))
@@ -520,3 +521,9 @@ class CodeEditor(QsciScintilla):
         if '    ' in text:
             self.setIndentationsUseTabs(False)
         self.qscinsert(text)
+
+    def _update_line_number_margin_width(self):
+        lines = self.lines()
+        digits = max(2, len(str(lines)))
+        margin_template = " #" + ("0" * digits)
+        self.setMarginWidth(1, margin_template)
